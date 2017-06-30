@@ -17,8 +17,14 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        //Capture Button Event
+        //btn_capture.setOnClickListener { v ->
+        //}
+
         val intent = moveToBarcodeCaptureAcitivity()
         startActivity(intent)
+        finish()
+
     }
 
     private fun moveToBarcodeCaptureAcitivity(): Intent {

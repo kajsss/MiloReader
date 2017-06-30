@@ -105,12 +105,33 @@ public final class BarcodeCaptureActivity extends AppCompatActivity {
             requestCameraPermission();
         }
 
-        gestureDetector = new GestureDetector(this, new CaptureGestureListener());
+        //gestureDetector = new GestureDetector(this, new CaptureGestureListener());
         scaleGestureDetector = new ScaleGestureDetector(this, new ScaleListener());
 
         Snackbar.make(mGraphicOverlay, "Tap to capture. Pinch/Stretch to zoom",
-                Snackbar.LENGTH_LONG)
-                .show();
+                Snackbar.LENGTH_LONG).show();
+
+            findViewById(R.id.btn_capture).setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Barcode best = null;
+                    float bestDistance = Float.MAX_VALUE;
+                    for (BarcodeGraphic graphic : mGraphicOverlay.getGraphics()) {
+                        Barcode barcode = graphic.getBarcode();
+                        best = barcode;
+                    }
+
+                    if (best != null) {
+                        Intent intent = new Intent(BarcodeCaptureActivity.this, ResultActivity.class);
+                        intent.putExtra(BarcodeObject, best);
+                    }else{
+                        Snackbar.make(mGraphicOverlay, "Can't find Barcode.",
+                                Snackbar.LENGTH_LONG).show();
+                    }
+
+                }
+            });
     }
 
     /**
@@ -150,9 +171,9 @@ public final class BarcodeCaptureActivity extends AppCompatActivity {
     public boolean onTouchEvent(MotionEvent e) {
         boolean b = scaleGestureDetector.onTouchEvent(e);
 
-        boolean c = gestureDetector.onTouchEvent(e);
-
-        return b || c || super.onTouchEvent(e);
+        //boolean c = gestureDetector.onTouchEvent(e);
+        //return b || c || super.onTouchEvent(e);
+        return b || super.onTouchEvent(e);
     }
 
     /**
@@ -360,9 +381,9 @@ public final class BarcodeCaptureActivity extends AppCompatActivity {
             }
         }
 
-        if (best != null) {
+        if (best != null) { // Todo
             Intent data = new Intent();
-            data.putExtra(BarcodeObject, best);
+            data.putExtra(BarcodeObject, best);  // best : Barcode Object
             setResult(CommonStatusCodes.SUCCESS, data);
             finish();
             return true;
