@@ -70,4 +70,5 @@ class BarcodeGraphicTracker extends Tracker<Barcode> {
     public void onDone() {
         mOverlay.remove(mGraphic);
     }
+
 }

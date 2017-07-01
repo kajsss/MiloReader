@@ -53,6 +53,7 @@ import com.milo.miloreader.barcode.camera.CameraSourcePreview;
 import com.milo.miloreader.barcode.camera.GraphicOverlay;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Activity for the multi-tracker app.  This app detects barcodes and displays the value with the
@@ -108,30 +109,24 @@ public final class BarcodeCaptureActivity extends AppCompatActivity {
         //gestureDetector = new GestureDetector(this, new CaptureGestureListener());
         scaleGestureDetector = new ScaleGestureDetector(this, new ScaleListener());
 
-        Snackbar.make(mGraphicOverlay, "Tap to capture. Pinch/Stretch to zoom",
-                Snackbar.LENGTH_LONG).show();
+        findViewById(R.id.btn_capture).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-            findViewById(R.id.btn_capture).setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
+                List<BarcodeGraphic> barcodeList = mGraphicOverlay.getGraphics();
 
-                    Barcode best = null;
-                    float bestDistance = Float.MAX_VALUE;
-                    for (BarcodeGraphic graphic : mGraphicOverlay.getGraphics()) {
-                        Barcode barcode = graphic.getBarcode();
-                        best = barcode;
-                    }
-
-                    if (best != null) {
-                        Intent intent = new Intent(BarcodeCaptureActivity.this, ResultActivity.class);
-                        intent.putExtra(BarcodeObject, best);
-                    }else{
-                        Snackbar.make(mGraphicOverlay, "Can't find Barcode.",
-                                Snackbar.LENGTH_LONG).show();
-                    }
-
+                if (!barcodeList.isEmpty()) {
+                    Barcode barcode = barcodeList.get(0).getBarcode();
+                    Intent intent = new Intent(BarcodeCaptureActivity.this, ResultActivity.class);
+                    intent.putExtra(BarcodeObject, barcode);
+                    startActivity(intent);
+                } else {
+                    Snackbar.make(mGraphicOverlay, "Can't find Barcode.",
+                            Snackbar.LENGTH_LONG).show();
                 }
-            });
+
+            }
+        });
     }
 
     /**
@@ -194,6 +189,7 @@ public final class BarcodeCaptureActivity extends AppCompatActivity {
         // create a separate tracker instance for each barcode.
         BarcodeDetector barcodeDetector = new BarcodeDetector.Builder(context).build();
         BarcodeTrackerFactory barcodeFactory = new BarcodeTrackerFactory(mGraphicOverlay);
+
         barcodeDetector.setProcessor(
                 new MultiProcessor.Builder<>(barcodeFactory).build());
 

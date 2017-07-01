@@ -26,6 +26,7 @@ import com.milo.miloreader.barcode.camera.GraphicOverlay;
  */
 public class BarcodeTrackerFactory implements MultiProcessor.Factory<Barcode> {
     private GraphicOverlay<BarcodeGraphic> mGraphicOverlay;
+    private BarcodeGraphicTracker barcodeGraphicTracker;
 
     public BarcodeTrackerFactory(GraphicOverlay<BarcodeGraphic> barcodeGraphicOverlay) {
         mGraphicOverlay = barcodeGraphicOverlay;
@@ -34,7 +35,8 @@ public class BarcodeTrackerFactory implements MultiProcessor.Factory<Barcode> {
     @Override
     public Tracker<Barcode> create(Barcode barcode) {
         BarcodeGraphic graphic = new BarcodeGraphic(mGraphicOverlay);
-        return new BarcodeGraphicTracker(mGraphicOverlay, graphic);
+        barcodeGraphicTracker = new BarcodeGraphicTracker(mGraphicOverlay, graphic);
+        return barcodeGraphicTracker;
     }
 
 }

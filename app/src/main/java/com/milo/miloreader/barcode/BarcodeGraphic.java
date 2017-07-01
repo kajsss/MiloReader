@@ -86,7 +86,7 @@ public class BarcodeGraphic extends GraphicOverlay.Graphic {
     @Override
     public void draw(Canvas canvas) {
         Barcode barcode = mBarcode;
-        if (barcode == null) {
+        if (barcode == null || barcode.format != Barcode.QR_CODE) {
             return;
         }
 

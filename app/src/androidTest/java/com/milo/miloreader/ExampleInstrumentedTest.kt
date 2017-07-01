@@ -22,6 +22,6 @@ class ExampleInstrumentedTest {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getTargetContext()
 
-        assertEquals("com.milo.miloreader", appContext.packageName)
+        assertEquals("com.logo_milo.miloreader", appContext.packageName)
     }
 }
